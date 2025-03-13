@@ -51,10 +51,23 @@ async function gerarPDF() {
     return;
   }
 
-  const contratante = `${nome}, inscrito(a) no CPF sob o nº ${cpf}, residente e domiciliado(a) em ${endereco}, nº ${numero}, ${complemento}, CEP ${document.getElementById('cep').value}`;
+  function formatarCPF(cpf) {
+    return cpf.replace(/\D/g, "")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{2})$/, "$1-$2");
+  };
+
+  const cpfFormatado = formatarCPF(cpf);
+
+  const contratante = { 
+    text: [
+      { text: nome, bold: true },
+      { text: `, inscrito(a) no CPF sob o nº ${cpfFormatado}, residente e domiciliado(a) em ${endereco}, nº ${numero}, ${complemento}, CEP ${document.getElementById('cep').value}.` }
+    ],
+  };
 
   try {
-    // Carregar a imagem de fundo como Base64
     const bgImageBase64 = await loadImageAsBase64("./bg.png");
 
     const docDefinition = {
@@ -68,9 +81,9 @@ async function gerarPDF() {
         { text: 'Contrato de Prestação de Serviços de Busca Genealógica', style: 'header' },
         '\n\n',
         { text: "Entre as partes:", bold: true, margin: [45, 0, 0, 0] },
-        { text: '1.   Contratante:', bold: true, margin: [61, 10, 45, 0], fontSize: 13 },
-        { text: `${contratante}`, margin: [80, 0, 45, 0], fontSize: 13 },
-        { text: '2.   Contratada:', bold: true, margin: [61, 0, 45, 0], fontSize: 13 },
+        { text: '1.   Contratante:', bold: true, margin: [61, 10, 45, 0], fontSize: 11 },
+        { text: { ...contratante }, margin: [80, 0, 45, 0], fontSize: 11 },
+        { text: '2.   Contratada:', bold: true, margin: [61, 0, 45, 0], fontSize: 11 },
         {
           text: [
             { text: ' Imigrei Assessoria de Imigração LTDA', bold: true },
@@ -84,17 +97,17 @@ async function gerarPDF() {
             { text: '442.462.388-21', bold: true },
             ', residente e domiciliada na Via Pigna, nº 22, Soave (VR), CEP 37038.'
           ],
-          fontSize: 13,
+          fontSize: 11,
           margin: [80, 0, 45, 0],
         },
         { text: "As partes têm entre si justo e contratado o seguinte:", bold: true, style: "text" },
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
+
         { text: 'Cláusula 1 – Objeto do Contrato', style: 'subheader' },
         {
           text: 'A Contratada compromete-se a realizar uma busca genealógica para verificar a existência de um ascendente direto do Contratante que tenha direito à cidadania italiana, conforme as informações fornecidas pelo Contratante.',
           style: "text",
         },
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
+
         { text: 'Cláusula 2 – Condições de Pagamento', style: 'subheader' },
         {
           text: [
@@ -104,7 +117,7 @@ async function gerarPDF() {
           ],
           style: "text",
         },
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
+
         { text: 'Cláusula 3 – Obrigações do Contratante', style: 'subheader' },
         {
           text: [
@@ -113,7 +126,7 @@ async function gerarPDF() {
           ],
           style: "list"
         },
-        { text: "- Nome completo dos familiares;\n- Datas e locais de nascimento, casamento ou óbito;\n- Registros ou cidades de origem conhecidas.", fontSize: 13, margin: [80, 0, 45, 0] },
+        { text: "- Nome completo dos familiares;\n- Datas e locais de nascimento, casamento ou óbito;\n- Registros ou cidades de origem conhecidas.", fontSize: 11, margin: [80, 5, 45, 0] },
         {
           text: [
             { text: "2." },
@@ -121,13 +134,10 @@ async function gerarPDF() {
           ],
           style: "list"
         },
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
 
         { text: "Cláusula 4 – Obrigações da Contratada", style: "subheader" },
         { text: "1. A Contratada compromete-se a realizar a busca genealógica com diligência e transparência, utilizando os recursos disponíveis para localizar o ascendente.", style: "list" },
         { text: "2. Caso o ascendente seja identificado, a Contratada fornecerá ao Contratante uma comprovação documental ou relatório com as informações encontradas.", style: "list" },
-
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
 
         { text: "Cláusula 5 – Rescisão e Penalidades", style: "subheader" },
         {
@@ -141,9 +151,7 @@ async function gerarPDF() {
         },
         { text: "2. Em caso de inadimplência, a Contratada reserva-se o direito de tomar medidas judiciais para a cobrança do valor devido.", style: "list" },
 
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
-
-        { text: "E por estarem justos e contratados, firmam o presente em duas vias de igual teor e forma.", margin: [45, 5, 45, 20], bold: true, fontSize: 13 },
+        { text: "E por estarem justos e contratados, firmam o presente em duas vias de igual teor e forma.", margin: [45, 5, 45, 10], bold: true, fontSize: 11 },
         { text: "Disposições Gerais:", style: "text", bold: true },
         {
           text: [
@@ -165,8 +173,6 @@ async function gerarPDF() {
         },
 
         { text: "E por estarem justos e contratados, firmam o presente em duas vias de igual teor e forma, para surta seus jurídicos e legais efeitos. ", style: "text" },
-
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
 
         {
           text: [
@@ -197,13 +203,12 @@ async function gerarPDF() {
         },
         { text: "Imigrei Assessoria de Imigração LTDA", alignment: "center" },
 
-        { text: "__________________________________________________________________________________", margin: [45, 20, 45, 20], alignment: "center" },
       ],
       styles: {
         header: { fontSize: 16, bold: true, alignment: 'center' },
-        subheader: { fontSize: 13, bold: true, margin: [45, 5, 45, 5] },
-        text: { fontSize: 13, margin: [45, 15, 45, 0] },
-        list: { fontSize: 13, margin: [60, 10, 45, 0] }
+        subheader: { fontSize: 11, bold: true, margin: [45, 15, 45, 5] },
+        text: { fontSize: 11, margin: [45, 15, 45, 0] },
+        list: { fontSize: 11, margin: [60, 10, 45, 0] }
       }
     };
 
