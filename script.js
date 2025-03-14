@@ -18,6 +18,12 @@ async function buscarEndereco() {
   }
 }
 
+document.getElementById('contratoSelect').addEventListener('change', function() {
+  if (this.value) {
+    window.location.href = this.value;
+  }
+});
+
 // Função para carregar imagem como Base64
 const loadImageAsBase64 = (url) => {
   return new Promise((resolve, reject) => {
