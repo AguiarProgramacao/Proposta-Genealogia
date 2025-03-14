@@ -51,7 +51,7 @@ p{
   padding: 10px 45px;
   background-color: transparent;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #2B612D;
   color: #2B612D;
   font-family: "Space Grotesk", sans-serif;
   font-size: 15px;
@@ -60,8 +60,9 @@ p{
 
 .btn-contrato{
   background-color: transparent;
-  color: #2B612D;
+  color: #FFF;
   text-decoration: none;
+  background-color: #2B612D;
 }
 
 .container-texto{
