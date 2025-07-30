@@ -183,7 +183,7 @@ async function gerarPDF() {
         {
           text: [
             { text: "Cláusula 7: ", bold: true },
-            { text: "Em caso de desistência da Ação feita por qualquer das partes litigantes, impontualidade, transação, revogação do mandato outorgado pelo Contratante ou ainda por qualquer ato deste (s) em conjunto ou outros violando o presente instrumento, reputar-se-á o mesmo vencido e exigível, sendo devidos pelo Contratante a totalidade dos honorários advocatícios que versariam sobre a ação. " }
+            { text: "Em caso de desistência da busca genealógica por parte da contratante após a assinatura do presente contrato e o envio da solicitação ao pesquisador, será devido o pagamento de 50% do valor total acordado. Caso a pesquisa tenha êxito, o pagamento integral (100%) será devido, independentemente da desistência." }
           ], style: "text"
         },
         {
