@@ -18,7 +18,7 @@ async function buscarEndereco() {
   }
 }
 
-document.getElementById('contratoSelect').addEventListener('change', function() {
+document.getElementById('contratoSelect').addEventListener('change', function () {
   if (this.value) {
     window.location.href = this.value;
   }
@@ -50,6 +50,8 @@ async function gerarPDF() {
   const numero = document.getElementById('numero').value;
   const complemento = document.getElementById('complemento').value;
   const localidade = document.getElementById('localidade').value;
+  const cidadania = document.getElementById('cidadania').value;
+  const valor = document.getElementById('valor').value;
   const dataEmissao = new Date().toLocaleDateString();
 
   if (!nome || !cpf || !endereco || !numero || !localidade) {
@@ -66,7 +68,7 @@ async function gerarPDF() {
 
   const cpfFormatado = formatarCPF(cpf);
 
-  const contratante = { 
+  const contratante = {
     text: [
       { text: nome, bold: true },
       { text: `, inscrito(a) no CPF sob o nº ${cpfFormatado}, residente e domiciliado(a) em ${endereco}, nº ${numero}, ${complemento}, CEP ${document.getElementById('cep').value}.` }
@@ -110,19 +112,32 @@ async function gerarPDF() {
 
         { text: 'Cláusula 1 – Objeto do Contrato', style: 'subheader' },
         {
-          text: 'A Contratada compromete-se a realizar uma busca genealógica para verificar a existência de um ascendente direto do Contratante que tenha direito à cidadania italiana, conforme as informações fornecidas pelo Contratante.',
+          text: `A Contratada compromete-se a realizar uma busca genealógica para verificar a existência de um ascendente direto do Contratante que tenha direito à ${cidadania}, conforme as informações fornecidas pelo Contratante.`,
           style: "text",
         },
 
         { text: 'Cláusula 2 – Condições de Pagamento', style: 'subheader' },
-        {
-          text: [
-            { text: 'O Contratante pagará à Contratada o valor de ' },
-            { text: '350 euros', bold: true },
-            { text: ', caso seja identificada a existência de um ascendente que atenda aos critérios de cidadania italiana. O pagamento deve ser efetuado no mesmo dia após a Contratada apresentar as informações que confirmem a ascendência. Nenhuma informação será fornecida antes do pagamento total da busca genealógica. Caso a Contratada não identifique o ascendente, nenhuma cobrança será realizada.' }
-          ],
-          style: "text",
-        },
+        (
+          cidadania.toLowerCase() === 'cidadania espanhola'
+            ? {
+              text: [
+                { text: 'O Contratante pagará à Contratada o valor de ' },
+                { text: `${valor} euros`, bold: true },
+                { text: `, para a busca ao ascendente que atenda aos critérios da ${cidadania}. O pagamento de ` },
+                { text: '50%', bold: true },
+                { text: ' deve ser efetuado no mesmo dia após a assinatura desse contrato. Nenhuma informação será fornecida antes do pagamento total da busca genealógica. Caso a Contratada não identifique o ascendente, os outros 50% não serão cobrados.' }
+              ],
+              style: "text"
+            }
+            : {
+              text: [
+                { text: 'O Contratante pagará à Contratada o valor de ' },
+                { text: `${valor} euros`, bold: true },
+                { text: `, caso seja identificada a existência de um ascendente que atenda aos critérios de ${cidadania}. O pagamento deve ser efetuado no mesmo dia após a Contratada apresentar as informações que confirmem a ascendência. Nenhuma informação será fornecida antes do pagamento total da busca genealógica. Caso a Contratada não identifique o ascendente, nenhuma cobrança será realizada.` }
+              ],
+              style: "text"
+            }
+        ),
 
         { text: 'Cláusula 3 – Obrigações do Contratante', style: 'subheader' },
         {
@@ -193,15 +208,15 @@ async function gerarPDF() {
           ], style: "text"
         },
         "\n\n",
-        { 
+        {
           text: [
             { text: "Contratante: ", bold: "true" },
             { text: "________________________________" },
           ], style: "text", alignment: "center"
         },
         { text: nome, alignment: "center" },
-        
-        { 
+
+        {
           text: [
             { text: "Contratada: ", bold: "true" },
             { text: "________________________________" },
